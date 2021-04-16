@@ -24,87 +24,10 @@
                   <router-link to="/intro">平台简介</router-link>
                 </span>
               </div>
-              <!-- <div class="head-left" v-show="hasLogin">
-                <span style="justify-content: flex-end;margin-right: 5px;color: #00A8FF;">
-                  Hi！{{user}}
-                </span>
-                <span id="personal">
-                  <router-link style="color:#00A8FF;" to="/personal">个人中心</router-link>
-                </span>
-                <span style="width: 50px;" >
-                  <span @click="lexit" style="    color: #426EFF;
-    border-left: 2px solid #426EFF;
-    width: 50px;
-    height: 38%;">退出</span>
-                </span>
-              </div> -->
               <div class="head-right mr10 a-link" @click="toLink" >
                   贵州水土保持大数据平台
                   <img class="link-img" src="../../assets/llogo.png">
               </div>
-          <el-dialog
-            title="登录"
-            :visible.sync="dialogVisible"
-            width="40%"
-              >
-            <div>
-              <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm1"  label-width="80px">
-                <el-form-item label="登录名"  prop="username">
-                  <el-input v-model="ruleForm1.username"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password">
-                  <el-input type="password" v-model="ruleForm1.password"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-button  type="primary" @click="login()">登录</el-button>
-                  <el-button  @click="dialogVisible = false">取消</el-button>
-                </el-form-item>
-              </el-form>
-            </div>
-          </el-dialog>
-
-          <el-dialog
-            title="注册"
-            :visible.sync="dialogVisible1"
-            width="50%"
-          >
-            <div>
-              <el-form  :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="80px">
-                <el-form-item label="用户名称"  prop="username">
-                  <el-input v-model="ruleForm2.username"></el-input>
-                </el-form-item>
-                <el-form-item label="手机号码" prop="mobile">
-                  <el-input v-model="ruleForm2.mobile"></el-input>
-                </el-form-item>
-                <el-form-item label="邮件地址" prop="email">
-                  <el-input v-model="ruleForm2.email"></el-input>
-                </el-form-item>
-               <!--  <el-form-item label="职业">
-                  <el-input v-model="ruleForm2.profession"></el-input>
-                </el-form-item>
-                <el-form-item label="单位">
-                  <el-input v-model="ruleForm2.company"></el-input>
-                </el-form-item>
-                <el-form-item label="所在城市">
-                  <el-input v-model="ruleForm2.city"></el-input>
-                </el-form-item>
-                <el-form-item label="详细地址">
-                  <el-input v-model="ruleForm2.address"></el-input>
-                </el-form-item> -->
-                <el-form-item label="密码" prop="password">
-                  <el-input type="password" v-model="ruleForm2.password"></el-input>
-                </el-form-item>
-                <el-form-item label="确认密码" prop="password1">
-                  <el-input type="password" v-model="ruleForm2.password1"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="register">注册</el-button>
-                  <el-button  @click="dialogVisible1 = false">取消</el-button>
-                </el-form-item>
-              </el-form>
-            </div>
-          </el-dialog>
-
         </div>
   </div>
 </template>

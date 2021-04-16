@@ -1,114 +1,112 @@
 <style scoped>
   .mytop{
     width: 100%;
-    height: 400px;
+    height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url("../../assets/vnew/sbg.png") no-repeat;
+    background: url("../../assets/booking/bg.jpg") no-repeat;
     background-size:cover;
   }
   .sdv{
     width: 720px;
-    height: 60px;
     display: flex;
+    width: 720px;
+    height: 310px;
     position: relative;
+    background: white;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-top: 3px solid #f99e3e;
+        padding: 28px 61px 59px;
   }
-  .sdv .sinpit{
-    width: 90%;
-    height: 100%;
+  .btn{
+        color: #fff;
+    background-color: #2076CF;
+    border-color: #2076CF;
+        text-align: center;
+    font-size: 24px;
+    margin-top: 30px;
   }
-  .sdv .sinpit input{
-    width: 100%;
-    height: 100%;
+</style>
+<style>
+  .mytop .el-form-item{
+    margin-bottom: 0px;
+  }
+  .mytop .el-form--label-top .el-form-item__label{
     padding: 0px;
-    margin: 0px;
-    border-width: 0px;
-    font-size: 18px;
-    text-indent: 20px;
-    color: #7C7C7C;
-    background: rgba(255,255,255,1);
-    border: 1px solid rgba(36,55,149,1);
-    opacity: 0.8;
-  }
-  .sdv .sicon{
-    width: 10%;
-    height: 100%;
-    background: #243795;  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .s-result{
-    width: 649px;
-    min-height: 60px;
-    max-height: 165px;
-    position: absolute;
-    top: 61px;
-    background: #F5F7FC;
-    border: 1px solid rgba(36,55,149,1);
-    padding-bottom: 5px;
-    overflow-y: auto;
-  }
-  .re-box{
-    width: 94%;
-    height: 100%;
-    margin-left: 5%;
-    margin-top: 1%;
-  }
-  .wre-box{
-    width: 100%;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .re-box .title{
-    width: 100%;
-    text-indent: 10px;
-    border-left: 2px solid #05469E;
-    color: #000000;
     font-weight: bold;
+    color: black;
   }
-  .re-box .list{
+  .mytop .el-date-editor--datetimerange.el-input, .el-date-editor--datetimerange.el-input__inner{
     width: 100%;
-    margin-top:10px;
   }
-  .re-box .list div{
-    margin-top:5px;
-    cursor: pointer;
+  .mytop .el-date-editor.el-input, .el-date-editor.el-input__inner{
+     width: 100%;
   }
 </style>
 <template>
        <div class="mytop">
           <div class="sdv">
-            <div class="sinpit"><input v-on:keyup="search()" v-model="searchinput" placeholder="请输入你想要搜索的内容" type="" name=""></div>
-            <div class="sicon pointer" @click="search()">
-              <img src="../../assets/vnew/search.png">
-            </div>
-            <div class="s-result" v-if="hasxia">
-              <div class="re-box" v-if="newData.length!=0">
-                <div class="title">新闻动态</div>
-                <div class="list">
-                  <div @click="goto(1,i.dataid)" v-for="i in newData">{{i.name}}</div>
-                </div>
-              </div>
-              <div class="re-box" v-if="mydata.length!=0">
-                <div class="title">数据中心</div>
-                <div class="list">
-                  <div @click="goto(2,i.dataid)" v-for="i in mydata">{{i.name}}</div>
-                </div>
-              </div>
-              <div class="re-box" v-if="showData.length!=0">
-                <div class="title">专题展示</div>
-                <div class="list">
-                  <div @click="goto(3,i.dataid)" v-for="i in showData">{{i.name}}</div>
-                </div>
-              </div>
-              <div class="wre-box" v-if="!hasData">
-                暂时无搜索结果！
-              </div>
-            </div>
+            <el-form style="width:100%;" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
+              <el-form-item>
+                <el-radio-group @change="changeR"  v-model="FlightState">
+                  <el-radio  :label="1">Round-trip</el-radio>
+                  <el-radio  :label="2">One-way</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item label="" prop="name">
+                <el-col :span="11">
+                  <el-form-item prop="date2" label="From">
+                    <el-input placeholder="From City or Airport" prefix-icon="el-icon-location-outline" v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                  .
+                </el-col>
+                 <el-col :span="11">
+                  <el-form-item prop="date2" label="To">
+                    <el-input placeholder="To City or Airport" prefix-icon="el-icon-location-outline" v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-form-item>
+              <el-form-item v-if="FlightState==1" label="Departing - Returning">
+                   <el-date-picker
+                   class="width100"
+                    v-model="value2"
+                    type="datetimerange"
+                    :picker-options="pickerOptions"
+                    range-separator="To"
+                    start-placeholder="Depart date and time"
+                    end-placeholder="return date and time"
+                    align="right">
+                  </el-date-picker>
+              </el-form-item>
+              <el-form-item v-if="FlightState==2" label="Departing">
+                    <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="Depart date and time">
+                  </el-date-picker>
+              </el-form-item>
+               <el-form-item label="" prop="name">
+                <el-col :span="11">
+                  <el-form-item prop="date2" label="passenger">
+                    <el-input placeholder="Number of passengers"  prefix-icon="el-icon-s-custom" v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                  .
+                </el-col>
+                 <el-col :span="11">
+                  <el-form-item prop="date2" label="Class">
+                    <el-input placeholder="The Class" prefix-icon="el-icon-crop" v-model="ruleForm.name"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-form-item>
+              <el-form-item>
+                <div class="btn width100" @click="submitForm('ruleForm')">search</div>
+              </el-form-item>
+            </el-form>
           </div>
        </div>
 </template>
@@ -121,13 +119,42 @@ export default {
   name: 'Head',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      searchinput:'',
-      hasxia:false,
-      hasData:false,
-      newData:[],
-      mydata:[],
-      showData:[]
+      FlightState:1,
+      return1:true,
+       ruleForm: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        rules: {
+          name: [
+            { required: true, message: '请输入活动名称', trigger: 'blur' },
+            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ],
+          region: [
+            { required: true, message: '请选择活动区域', trigger: 'change' }
+          ],
+          date1: [
+            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          ],
+          date2: [
+            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          ],
+          type: [
+            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+          ],
+          resource: [
+            { required: true, message: '请选择活动资源', trigger: 'change' }
+          ],
+          desc: [
+            { required: true, message: '请填写活动形式', trigger: 'blur' }
+          ]
+        }
     }
   },
   watch: {
@@ -139,6 +166,9 @@ export default {
   mounted(){
   },
   methods:{
+    changeR(val){
+      //debugger;
+    },
     getKey()
     {
        this.$router.push({path:'/datas',query:{key:this.searchinput}});

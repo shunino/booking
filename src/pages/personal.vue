@@ -54,19 +54,12 @@
   <div class="commondiv">
     <div class="per-content">
         <div class="per-left">
-         <!-- <div class="per-avater">
-           <img style="width:90%;height: 90%" src="../../static/ata.jpg">
-         </div> -->
           <div class="per-menu">
               <ul>
-<!--                <li style="display: none" v-show="isAdmin"  id="perHome" @click="changTab('perHome')">首页管理</li>-->
                 <li  class="cur" id="perShare" @click="changTab('perShare')">我的共享</li>
                 <li v-show="isAdmin"  id="perNews" @click="changTab('perNews')">新闻动态</li>
-<!--                <li style="display: none" v-show="isAdmin"  id="perDatas" @click="changTab('perDatas')">数据中心</li>-->
-
 
                 <li v-show="isAdmin"  id="perDemo" @click="changTab('perDemo')">专题展示</li>
-
                 <div class="showdiv" style="display: none">
                   <li id="perDemo1" @click="changTab1('perDemo1')">大数据</li>
                   <li id="perDemo2" @click="changTab1('perDemo2')">预防监督</li>

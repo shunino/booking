@@ -5,7 +5,7 @@
   justify-content: center;
 }
 .per-box{
-  width: 550px;
+  width: 465px;
   height: 509px;
   display: flex;
   align-items: center;
@@ -16,7 +16,7 @@
   width: 100%;
   height: 426px;
   display: flex;
-  align-items: center;
+  /*align-items: center;*/
  /* justify-content: center;*/
   flex-direction: column;
   background:rgba(255,255,255,1);
@@ -65,9 +65,8 @@
     line-height: 37px;
     text-align: center;
     color: white;
-    width: 294px;
+    width: 100%;
     height: 37px;
-    margin-left: -26px;
 background:linear-gradient(90deg,rgba(85,145,255,1) 0%,rgba(28,145,226,1) 50%,rgba(88,101,185,1) 100%);
 cursor: pointer;
 }
@@ -75,30 +74,28 @@ cursor: pointer;
 <template>
   <div class="commondiv" style="position:relative;width:100%;">
     <div class="per-box">
-      <div class="tool"><span>已有账号，</span><span class="cc">马上登录</span><span @click="goLogin()" class="cc tologin">返回登录页</span></div>
-      <div class="title">注册账号</div>
+  <!--     <div class="tool"><span>已有账号，</span><span class="cc">马上登录</span><span @click="goLogin()" class="cc tologin">返回登录页</span></div> -->
+      <div class="title">Create Your Account</div>
       <div class="mform-div">
         <div class="mform">
-        <el-form  :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="80px">
-                <el-form-item label="用户名称"  prop="username">
-                  <el-input placeholder="请输入用户名称" v-model="ruleForm2.username"></el-input>
+        <el-form  :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="160px">
+                <el-form-item label="firstName"  prop="firstName">
+                  <el-input placeholder="firstName" v-model="ruleForm2.firstName"></el-input>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="mobile">
-                  <el-input placeholder="请输入手机号码" v-model="ruleForm2.mobile"></el-input>
+                <el-form-item label="lastName" prop="lastName">
+                  <el-input placeholder="lastName" v-model="ruleForm2.lastName"></el-input>
                 </el-form-item>
-                <el-form-item label="邮件地址" prop="email">
-                  <el-input placeholder="请输入邮件地址" v-model="ruleForm2.email"></el-input>
+                <el-form-item label="email" prop="email">
+                  <el-input placeholder="email" v-model="ruleForm2.email"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password">
-                  <el-input placeholder="请输入密码" type="password" v-model="ruleForm2.password"></el-input>
+                <el-form-item label="password" prop="password">
+                  <el-input placeholder="password" type="password" v-model="ruleForm2.password"></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码" prop="password1">
-                  <el-input placeholder="请再次输入密码" type="password" v-model="ruleForm2.password1"></el-input>
+                <el-form-item label="confirm password" prop="password1">
+                  <el-input placeholder="password" type="password" v-model="ruleForm2.password1"></el-input>
                 </el-form-item>
-                <el-form-item>
-                  <span @click="register" class="msubmit">立即注册</span>
-                  <!-- <el-button type="primary" @click="register">注册</el-button>
-                  <el-button  @click="dialogVisible1 = false">取消</el-button> -->
+                <el-form-item style="text-align:right;">
+                  <span @click="register" class="msubmit">Create Account</span>
                 </el-form-item>
           </el-form>
       </div>
@@ -113,32 +110,18 @@ export default {
     return {
       ruleForm2:{},
       rules2:{
-        username: [
-            { required: true, trigger: 'blur',validator: this.vcopy },
+        firstName: [
+            { required: true, trigger: 'blur'},
           ],
-        mobile: [
-          {
-            required: true,
-            message: "请输入手机号码",
-            trigger: "blur"
-          },
-          {
-            validator: function(rule, value, callback) {
-              if (/^1[34578]\d{9}$/.test(value) == false) {
-                callback(new Error("手机号格式错误"));
-              } else {
-                callback();
-              }
-            },
-            trigger: "blur"
-          }
+        lastName: [
+          { required: true, trigger: 'blur'},
         ],
         email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+          { required: true, message: 'please enter email', trigger: 'blur' },
+          { type: 'email', message: 'please enter correct email', trigger: ['blur', 'change'] }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          { required: true, message: 'please enter password', trigger: 'blur' },
         ],
         password1: [
           {required: true,validator: this.validatePass, trigger: 'blur' },
@@ -156,22 +139,22 @@ export default {
     validatePass(rule, value, callback){
       console.log(rule,value,callback);
       if (!value || value === '') {
-        callback(new Error('请再次输入密码'));
+        callback(new Error('please enter password！'));
       } else if (value !== this.ruleForm2.password) {
-        callback(new Error('两次输入密码不一致!'));
+        callback(new Error('The two passwords do not match!'));
       } else {
         callback();
       }
     },
     vcopy(rule, value, callback){
       if (!value || value === '') {
-        callback(new Error('请输入用户名!'));
+        callback(new Error('please enter name!'));
       }
       this.$http.post('api/resshare/user/checkUserId',{
         username:value,
       }).then(res => {
         if(!res.data.data){
-          callback(new Error('用户名重复!'));
+          callback(new Error('Duplicate name!'));
         } else{
           callback();
         }
@@ -187,11 +170,14 @@ export default {
       var self = this;
       this.$refs['ruleForm2'].validate((valid) => {
         if (valid) {
-          self.$http.post('api/resshare/user/registryUser',{
-            user:self.ruleForm2,
+          self.$http.post('/ips/api/account',{
+             "email": self.ruleForm2.email,
+            "firstName": self.ruleForm2.firstName,
+            "lastName": self.ruleForm2.lastName,
+            "password": self.ruleForm2.password
           }).then(res => {
            // self.login(self.ruleForm2.username,self.ruleForm2.password)
-            self.$message.success('注册成功！');
+            self.$message.success('success');
             console.log(res);
           }).catch(err => {
             console.log(err)

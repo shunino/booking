@@ -11,9 +11,9 @@
           <top></top>
        <!--  </div>
       </div> -->
-      <myhead id="myhead"></myhead>
+      <!-- <myhead id="myhead"></myhead> -->
       <search id="mysearch"></search>
-      <div id="mydiv" style="width: 100%;display: flex;justify-content: center;background: #F7F6FD;padding-bottom: 20px;">
+      <div id="mydiv" style="width: 100%;display: flex;justify-content: center;background: white;padding-bottom: 20px;">
         <div style="width: 1400px;display: flex;justify-content: center;flex-direction: column;height:100%;">
           
             <router-view/>
@@ -81,6 +81,9 @@ export default {
 }
 </script>
 <style>
+.width100{
+  width:100%;
+}
   .vdataDiv{
     min-height: 768px;
       min-width: 1729px;
