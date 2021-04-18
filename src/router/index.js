@@ -28,6 +28,8 @@ import Login from '@/pages/personal/login'
 import Register from '@/pages/personal/register'
 import ForgetPwd from '@/pages/personal/forgetPwd'
 
+import Flight from '@/pages/flight'
+
 Vue.use(Router)
 const HoTitle = '-贵州水土保持-数据共享中心';
 const router = new Router({
@@ -38,6 +40,15 @@ const router = new Router({
       component: Login,
       meta:{
           title: '登录'+HoTitle
+      }
+
+    },
+    {
+      path: '/flight',
+      name: 'Flight',
+      component: Flight,
+      meta:{
+          title: 'Flight'
       }
 
     },
