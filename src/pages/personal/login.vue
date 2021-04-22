@@ -142,9 +142,12 @@ export default {
         this.ruleForm1.password = pwd;
       }
       this.$refs['ruleForm1'].validate((valid) => {
-        //debugger;
+        let formData = new FormData();
+        formData.append('username', self.ruleForm1.email);
+        formData.append('password', self.ruleForm1.verificationCode);
         if (valid) {
-          self.$http.post('/ips/api/account/verify',{ "email":self.ruleForm1.email,"verificationCode":self.ruleForm1.verificationCode}).then(res => {
+          self.$http.post(this.$host+'/api/auth',formData).then(res => {
+            debugger;
             self.$setCookie('username',res.data.data.username,'55');
             self.$setCookie('userid',res.data.data.userid,'55');
             self.$setCookie('token',res.data.data.token,'55');

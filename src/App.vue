@@ -20,7 +20,7 @@
           
         </div>
       </div>
-      <myfooter></myfooter>
+      <!-- <myfooter></myfooter> -->
     </div>
     <div v-if="vdata" class="vdataDiv" >
       
@@ -81,6 +81,12 @@ export default {
 }
 </script>
 <style>
+.flexc{
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .width100{
   width:100%;
 }

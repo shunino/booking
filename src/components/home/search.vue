@@ -12,12 +12,12 @@
     width: 720px;
     display: flex;
     width: 720px;
-    height: 310px;
+    height: 250px;
     position: relative;
     background: white;
     background-color: rgba(255, 255, 255, 0.8);
     border-top: 3px solid #f99e3e;
-        padding: 28px 61px 59px;
+    padding: 28px 61px 59px;
   }
   .btn{
         color: #fff;
@@ -54,10 +54,26 @@
                   <el-radio  :label="2">One-way</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item label="" prop="name">
+              <el-form-item label="">
                 <el-col :span="11">
                   <el-form-item prop="date2" label="From">
-                    <el-input placeholder="From City or Airport" prefix-icon="el-icon-location-outline" v-model="ruleForm.name"></el-input>
+                    <el-select
+                      v-model="value"
+                      multiple
+                      filterable
+                      remote
+                      reserve-keyword
+                     placeholder="From City or Airport" 
+                     prefix-icon="el-icon-location-outline"
+                      :remote-method="getAirport"
+                      :loading="loading">
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="2">
@@ -69,7 +85,28 @@
                   </el-form-item>
                 </el-col>
               </el-form-item>
-              <el-form-item v-if="FlightState==1" label="Departing - Returning">
+              <!-- <el-form-item v-if="FlightState==1" label="Departing - Returning">
+                   <el-date-picker
+                   class="width100"
+                    v-model="value2"
+                    type="datetimerange"
+                    :picker-options="pickerOptions"
+                    range-separator="To"
+                    start-placeholder="Depart date and time"
+                    end-placeholder="return date and time"
+                    align="right">
+                  </el-date-picker>
+              </el-form-item>
+              <el-form-item v-if="FlightState==2" label="Departing">
+                    <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="Depart date and time">
+                  </el-date-picker>
+              </el-form-item> -->
+               <el-form-item label="" prop="name">
+                <el-col :span="11">
+                 <el-form-item v-if="FlightState==1" label="Departing - Returning">
                    <el-date-picker
                    class="width100"
                     v-model="value2"
@@ -88,11 +125,6 @@
                     placeholder="Depart date and time">
                   </el-date-picker>
               </el-form-item>
-               <el-form-item label="" prop="name">
-                <el-col :span="11">
-                  <el-form-item prop="date2" label="passenger">
-                    <el-input placeholder="Number of passengers"  prefix-icon="el-icon-s-custom" v-model="ruleForm.name"></el-input>
-                  </el-form-item>
                 </el-col>
                 <el-col :span="2">
                   .
@@ -119,6 +151,8 @@ export default {
   name: 'Head',
   data () {
     return {
+      loading:false,
+      options:[],
       FlightState:1,
       return1:true,
        ruleForm: {
@@ -166,6 +200,25 @@ export default {
   mounted(){
   },
   methods:{
+    getAirport(val){
+      let self = this;
+      debugger;
+      self.$http.get(this.$host+'/api/airport/search',{city:val}).then(res => {
+        debugger;
+        self.$setCookie('username',res.data.data.username,'55');
+        self.$setCookie('userid',res.data.data.userid,'55');
+        self.$setCookie('token',res.data.data.token,'55');
+        // self.hasLogin = true;
+        // self.dialogVisible1 = false;
+        // self.dialogVisible = false;
+        // self.user = this.$getCookie('username');
+        self.$router.push({path:'/'});
+        console.log(res);
+      }).catch(err => {
+        self.$message.error('email or password is error!');
+        console.log(err)
+      })
+    },
     changeR(val){
       //debugger;
     },

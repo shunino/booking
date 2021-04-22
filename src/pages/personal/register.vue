@@ -170,20 +170,20 @@ export default {
       var self = this;
       this.$refs['ruleForm2'].validate((valid) => {
         if (valid) {
-          self.$http.post('/ips/api/account',{
-             "email": self.ruleForm2.email,
-            "firstName": self.ruleForm2.firstName,
-            "lastName": self.ruleForm2.lastName,
-            "password": self.ruleForm2.password
-          }).then(res => {
-           // self.login(self.ruleForm2.username,self.ruleForm2.password)
-            self.$message.success('success');
-            console.log(res);
-          }).catch(err => {
-            console.log(err)
-          })
-        }
-      });
+          self.$http.put(this.$host+'/api/account',{
+               "email": self.ruleForm2.email,
+              "firstName": self.ruleForm2.firstName,
+              "lastName": self.ruleForm2.lastName,
+              "password": self.ruleForm2.password
+            }).then(res => {
+             // self.login(self.ruleForm2.username,self.ruleForm2.password)
+              self.$message.success('success');
+              console.log(res);
+            }).catch(err => {
+              console.log(err)
+            })
+          }
+        });
     },
   }
 };

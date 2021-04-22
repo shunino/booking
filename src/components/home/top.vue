@@ -62,13 +62,13 @@
             <img class="pointer" @click="goto()" src="../../assets/booking/logo.png">
           </div>
           <div class="tab" style="width:60%;">
-            <div class="tabclick">
+            <!-- <div class="tabclick">
               <div>
                 <img src="../../assets/booking/position.png">
               </div>
               <div>TRAVEL</div>
-            </div>
-            <div class="tabclick">
+            </div> -->
+            <div @click="goto()" class="tabclick">
               <div>
                 <img src="../../assets/booking/air.png">
               </div>
@@ -76,7 +76,7 @@
             </div>
           </div>
            <div class="top-search" style="width:20%;text-align:right;">
-             <div class="head-left" v-show="hasLogin">
+             <div class="head-left" v-show="!hasLogin">
                 <span style="justify-content: flex-end;margin-right: 5px;">
                   Hi！{{user}}
                 </span>

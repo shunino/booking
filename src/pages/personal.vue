@@ -56,155 +56,52 @@
         <div class="per-left">
           <div class="per-menu">
               <ul>
-                <li  class="cur" id="perShare" @click="changTab('perShare')">我的共享</li>
-                <li v-show="isAdmin"  id="perNews" @click="changTab('perNews')">新闻动态</li>
-
-                <li v-show="isAdmin"  id="perDemo" @click="changTab('perDemo')">专题展示</li>
-                <div class="showdiv" style="display: none">
-                  <li id="perDemo1" @click="changTab1('perDemo1')">大数据</li>
-                  <li id="perDemo2" @click="changTab1('perDemo2')">预防监督</li>
-                  <li id="perDemo3" @click="changTab1('perDemo3')">综合治理</li>
-                  <li id="perDemo4" @click="changTab1('perDemo4')">监测预报</li>
-                  <li class="showbo" v-show="isAdmin" id="perGarden" @click="changTab1('perGarden')">生态文明示范</li>
-                  <li  class="showbo" v-show="isAdmin" id="perPop" @click="changTab1('perPop')" >科技推广</li>
-                </div>
-
-                <li style="border-bottom: none" v-show="isAdmin" id="perver" @click="changTab('perver')" >审核数据</li>
-
-                <li v-show="isUser" id="perReposit" @click="changTab('perReposit')">我的收藏</li>
-                <li v-show="isUser" id="perDown" @click="changTab('perDown')">下载历史</li>
-                <li style="border-bottom: none" v-show="isUser" id="perIntro" @click="changTab('perIntro')">个人资料</li>
+                <li  class="cur" id="info" @click="changTab('info')">我的信息</li>
+                <li   id="myorder" @click="changTab('myorder')">我的订单</li>
+                <li  id="card" @click="changTab('card')">信用卡</li>
               </ul>
           </div>
         </div>
-      <div class="per-center" >
-          <share @upload="changDetail" @cshare="cshare" v-if="tabtype=='perShare'" class="perShare perCom"></share>
-          <reposit v-if="tabtype=='perReposit'" class="perReposit perCom"></reposit>
-          <down v-if="tabtype=='perDown'" class="perDown perCom"></down>
-          <intro @changeName="changeName" v-if="tabtype=='perIntro'" class="perIntro perCom"></intro>
-          <garden v-if="tabtype=='perGarden'" class="perGarden perCom"></garden>
-          <verForm v-if="tabtype=='perver'" class="perver perCom"></verForm>
-          <!--  admin      -->
-          <homeForm v-if="tabtype=='perHome'" class="perHome perCom"></homeForm>
-
-          <demoForm  v-if="tabtype=='perDemo1'" type="1" class="perDemo perCom"></demoForm>
-          <demoForm  v-if="tabtype=='perDemo2'" type="2" class="perDemo perCom"></demoForm>
-          <demoForm  v-if="tabtype=='perDemo3'" type="3" class="perDemo perCom"></demoForm>
-          <demoForm  v-if="tabtype=='perDemo4'" type="4" class="perDemo perCom"></demoForm>
-
-          <datasForm v-if="tabtype=='perDatas'" class="perDatas perCom"></datasForm>
-          <newsForm v-if="tabtype=='perNews'" class="perNews perCom"></newsForm>
-          <popForm v-if="tabtype=='perPop'" class="perPop perCom"></popForm>
-          <!-- 内部组件  -->
-          <shareForm :shareData="shareData" @upload="changDetail" v-if="tabtype=='shareForm'"></shareForm>
+      <div class="per-center" >   
+          <Card  v-if="tabtype=='card'" class="card"></Card>
+          <Info  v-if="tabtype=='info'" class="info"></Info>
+          <Myorder  v-if="tabtype=='myorder'" class="myorder"></Myorder>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Head from '@/components/home/Head'
-import Footer from '@/components/home/footer'
-
-import Garden from '@/components/personal/garden'
-import Share  from '@/components/personal/share'
-import Down from '@/components/personal/down'
-import Intro from '@/components/personal/intro'
-import Reposit from '@/components/personal/reposit'
-
-import ShareForm from '@/components/personal/shareForm'
-
-import HomeForm  from '@/components/personal/admin/homeForm'
-import DemoForm  from '@/components/personal/admin/demoForm'
-import DatasForm  from '@/components/personal/admin/datasForm'
-import NewsForm  from '@/components/personal/admin/newsForm'
-import PopForm  from '@/components/personal/admin/popularForm'
-
-import VerForm  from '@/components/personal/admin/verify'
+import Info from '../components/flight/info'
+import Card from '../components/flight/card'
+import Myorder from '../components/flight/myorder'
 export default {
   name: 'Home',
   data () {
     return {
-      tabtype:'perShare',
+      tabtype:'info',
       isAdmin:true,
       isUser:true,
       shareData:{}
     }
   },
   mounted(){
-          $('#mysearch').hide();
+    $('#mysearch').hide();
     var user = this.$getCookie('username');
-    if(user=='admin'){
-      this.isAdmin = true;
-      this.isUser = false;
-      // let tab = 'perNews';
-      // $('.per-menu').find('ul li').removeClass('cur');
-      // $('#'+tab).addClass('cur');
-      // console.log(tab);
-      // this.tabtype = tab;
-    } else if(user=='shu'){
-      this.isAdmin = true;
-      this.isUser = true;
-    } else{
-      this.isAdmin = false;
-      this.isUser = true;
-    }
     $('.head-left').find('span').removeClass('cur');
     $('#personal').addClass('cur');
   },
   methods: {
-    cshare(data){
-      this.shareData = data;
-      this.tabtype = 'shareForm';
-    },
-    changeName(name){
-      console.log(name);
-    },
-    changTab1(tab) {
-        $('.per-menu').find('ul .showdiv li').removeClass('cur');
-        $('#'+tab).addClass('cur');
-        console.log(tab);
-        this.tabtype = tab;
-    },
     changTab(tab) {
-      if(tab=='perDemo'){
-        $('.per-menu').find('ul li').removeClass('cur');
-        $('#'+tab).addClass('cur');
-        //this.tabtype = tab;
-        if($(".showdiv").is(":hidden")){
-          $(".showdiv").show();
-        } else{
-          $(".showdiv").hide();
-        }
-      } else {
-        $('.per-menu').find('ul li').removeClass('cur');
-        $('#'+tab).addClass('cur');
-        console.log(tab);
-        this.tabtype = tab;
-        $(".showdiv").hide();
-      }
-    },
-    changDetail(tab) {
-      this.shareData={};
       this.tabtype = tab;
-      console.log(this.tabtype);
+        $('.per-menu').find('ul li').removeClass('cur');
+        $('#'+tab).addClass('cur');
     },
   },
   components: {
-    'myhead': Head,
-    'myfooter': Footer,
-    'garden': Garden,
-    'share': Share,
-    'down': Down,
-    'intro': Intro,
-    'reposit': Reposit,
-    'shareForm': ShareForm,
-    'homeForm':HomeForm,
-    'demoForm':DemoForm,
-    'datasForm':DatasForm,
-    'newsForm':NewsForm,
-    'popForm':PopForm,
-    'verForm':VerForm
+    'Card': Card,
+    'Info':Info,
+    'Myorder':Myorder
   }
 }
 </script>

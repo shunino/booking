@@ -1,140 +1,112 @@
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-  .f-box{
-    box-shadow: rgb(0 0 0 / 8%) 0px 0px 2px 0px, rgb(0 0 0 / 16%) 0px 1px 4px 0px;
-    border: 1px solid rgb(192, 202, 213);
-    border-radius: 6px;
-    background-color: rgb(255, 255, 255);
-    cursor: pointer;
-    width: 700px;
-    height: 150px;
-  }
-  .content{
-    width: 100%;
-    display: flex;
-    height: 80%;
-    border-bottom:1px solid gray;
-  }
-  .foot{
-    height: 20%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-  }
-  .content .left{
-    width: 75%;
-  }
-  .content .left .head{
-    width: 100%;
-    height: 38px;
-    line-height: 38px;
-    text-align: left;
-    padding-left: 20px;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  .content .left .main{
-    width: 100%;
-    height:calc( 100% - 38px );
-    display: flex;
-    padding-top: 7px;
-  }
-  .content .left .main .m-left{
-    width: 20%;
-    height:100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /*justify-content: center;*/
-  }
-  .content .left .main .m-left img{
-    width: 30px;
-    height:30px;
-  }
-  .content .left .main .m-right{
-    width: 80%;
-    height:100%;
-    text-align: left;
-    padding-right: 10px;
-  }
-  .content .left .main .m-right el-steps{
-    width: 80%;
-    height:100%;
-  }
-  .content .right{
-    width: 25%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    border-left: 1px solid gray;
-    justify-content: center;
-  }
+<style scoped> 
 </style>
 <style type="text/css">
-  /*.el-step.is-horizontal:last-child{
-   max-width: 12% !important;
-  }*/
-  .el-step__title{
-    line-height: unset;
-  }
+ .box-card{
+  width:100%;
+  margin-top: 20px;
+ }
+ .d-box{
+  width:60%;
+ }
+ .pay-box{
+  width:100%; 
+ }
+ .myload{
+  height: 300px;
+  font-size: 30px;
+ }
 </style>
 <template>
   <div class="commondiv">
-    <div class="f-box">
-      <div class="content">
-        <div class="left">
-          <div class="head">
-            <span>Nonstop</span>
-            <span style="color: gray;">1h 58m</span>
-          </div>
-          <div class="main">
-            <div class="m-left">
-             <div><img src="../assets/llogo.png"></div>
-             <div>SIC</div>
-            </div>
-            <div class="m-right">
-              <el-steps :active="1" >
-                <el-step title="11:43a" description="DTA" icon="el-icon-s-promotion"></el-step>
-                <el-step title="14:45p" description="ATL" icon="el-icon-s-promotion">></el-step>
-              </el-steps>
-              <!--  <el-steps :active="1" >
-                <el-step title="11:43a" description="DTA" icon="el-icon-s-promotion"></el-step>
-                <el-step title="13:45p" description="CCK" icon="el-icon-minus">></el-step>
-                <el-step title="14:45p" description="ATL" icon="el-icon-s-promotion">></el-step>
-              </el-steps> -->
-            </div>
-          </div>
-        </div>
-        <div class="right">
-          <div style="font-weight: bold;">BASIC ECONOMY</div>
-          <div style="color: rgb(0, 170, 0);font-size: 28px;">$100</div>
-          <div style="font-size: 14px;color: gray;">one-way</div>
-        </div>
+    <el-dialog
+      title="订单"
+      :visible.sync="dialogVisible"
+      width="60%"
+      :before-close="handleClose">
+      <div v-if="!payProgerss" class="pay-box">
+        <Pay></Pay>
       </div>
-      <div class="foot">
-        <span><i class="el-icon-check mr-10"></i> Free cancellation available</span>
-      </div>
-    </div>
+      <div v-if="payProgerss" class="myload flexc">
+        订单生成中......
+      </div>   
+    </el-dialog>
+    <div class="d-box">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>FLIGHT</span>
+        </div>
+        <div class="text item">
+          <OrderDetail></OrderDetail>
+        </div>
+      </el-card>
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>passange</span>
+        </div>
+        <div class="text item">
+          <el-form :inline="true" v-for="(item,index) in user"  class="demo-form-inline">
+            <el-form-item label="firstName">
+              <el-input v-model="item.firstName" placeholder="firstName"></el-input>
+            </el-form-item>
+            <el-form-item label="lastName">
+              <el-input v-model="item.lastName" placeholder="lastName"></el-input>
+            </el-form-item>
+            <el-form-item v-if="index==0">
+              <el-button type="primary" @click="pushUser">add</el-button>
+            </el-form-item>
+            <el-form-item v-if="index!=0">
+              <el-button type="warning" @click="popUser(index)">del</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </el-card>
+      <div @click="addOrder()"> <el-button class="width100 mt20" type="primary">sure</el-button></div>
+    </div> 
   </div>
 </template>
 
 <script>
+import Pay from '../components/flight/pay'
+import OrderDetail from '../components/flight/orderDetail'
   export default {
     name: 'Home',
     data () {
       return {
-        
+        dialogVisible:false,
+        user:[],
+        payProgerss:true
       }
     },
     mounted(){
      $('#mysearch').hide();
+     this.pushUser();
     },
     methods:{
-      
+      handleClose(){
+        this.dialogVisible = false;
+        this.payProgerss = true;
+      },
+      addOrder(){
+        this.dialogVisible = true;
+        let self = this;
+        setTimeout(function(){
+          self.payProgerss = false;
+        },2000)
+      },
+      popUser(index){
+        this.user.splice(index, 1);
+      },
+      pushUser(){
+        let ob = {
+           firstName:'',
+           lastName:''
+        }
+        this.user.push(ob);
+      }
     },
     components: {
-     
+     'Pay':Pay,
+     'OrderDetail':OrderDetail
     }
   }
 </script>
