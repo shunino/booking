@@ -148,15 +148,16 @@ export default {
         if (valid) {
           self.$http.post(this.$host+'/api/auth',formData).then(res => {
             debugger;
-            self.$setCookie('username',res.data.data.username,'55');
-            self.$setCookie('userid',res.data.data.userid,'55');
-            self.$setCookie('token',res.data.data.token,'55');
-            // self.hasLogin = true;
-            // self.dialogVisible1 = false;
-            // self.dialogVisible = false;
-            // self.user = this.$getCookie('username');
-            self.$router.push({path:'/'});
-            console.log(res);
+           self.$http.post(this.$host+'/api/auth',{header:{}}).then(res1 => {
+                self.$setCookie('username',res.data.data.username,'55');
+                self.$setCookie('userid',res.data.data.userid,'55');
+                self.$setCookie('token',res.data.data.token,'55');
+                self.$router.push({path:'/'});
+                console.log(res);
+              }).catch(err => {
+                self.$message.error('email or password is error!');
+                console.log(err)
+              })
           }).catch(err => {
             self.$message.error('email or password is error!');
             console.log(err)

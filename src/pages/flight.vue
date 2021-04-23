@@ -19,15 +19,15 @@
 <template>
   <div class="commondiv">
     <el-dialog
-      title="订单"
+      title="Order"
       :visible.sync="dialogVisible"
       width="60%"
       :before-close="handleClose">
       <div v-if="!payProgerss" class="pay-box">
-        <Pay></Pay>
+        <Pay :nameArr="nameArr"></Pay>
       </div>
       <div v-if="payProgerss" class="myload flexc">
-        订单生成中......
+        Create Order......
       </div>   
     </el-dialog>
     <div class="d-box">
@@ -36,7 +36,7 @@
           <span>FLIGHT</span>
         </div>
         <div class="text item">
-          <OrderDetail></OrderDetail>
+          <OrderDetail :price="price"></OrderDetail>
         </div>
       </el-card>
       <el-card class="box-card">
@@ -60,7 +60,7 @@
           </el-form>
         </div>
       </el-card>
-      <div @click="addOrder()"> <el-button class="width100 mt20" type="primary">sure</el-button></div>
+      <div @click="addOrder()"> <el-button class="width100 mt20" type="primary">Create Order</el-button></div>
     </div> 
   </div>
 </template>
@@ -74,7 +74,9 @@ import OrderDetail from '../components/flight/orderDetail'
       return {
         dialogVisible:false,
         user:[],
-        payProgerss:true
+        payProgerss:true,
+        nameArr:[],
+        price:0
       }
     },
     mounted(){
@@ -87,20 +89,35 @@ import OrderDetail from '../components/flight/orderDetail'
         this.payProgerss = true;
       },
       addOrder(){
-        this.dialogVisible = true;
+        let right = true;
         let self = this;
+        this.nameArr = [];
+        this.user.map(function(item){
+          if(item.firstName==''||item.lastName=='') right= false;
+          self.nameArr.push(item.firstName+' '+item.lastName);
+        });
+        if(!right){
+          this.$message({
+            message: 'Please fill in the passenger name',
+            type: 'warning'
+          });
+          return;
+        }
+        this.dialogVisible = true;
         setTimeout(function(){
           self.payProgerss = false;
         },2000)
       },
       popUser(index){
         this.user.splice(index, 1);
+        this.price = this.price-100;
       },
       pushUser(){
         let ob = {
            firstName:'',
            lastName:''
         }
+        this.price = this.price+100;
         this.user.push(ob);
       }
     },

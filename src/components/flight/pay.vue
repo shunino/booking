@@ -5,28 +5,32 @@
 </style>
 <template>
   <div class="info-box">
-    <OrderDetail></OrderDetail>
+    <OrderDetail price="100"></OrderDetail>
       <el-divider></el-divider>
-      <div style="text-align: left;font-size: 20px;">passange: fdfdfsdfsdfsfew,gdfgdfgdfgfdgdg</div>
+      <div style="text-align: left;font-size: 20px;">passange: 
+        <span v-for="i in nameArr">
+          <span>{{i}},</span>
+        </span></div>
        <el-divider></el-divider>
       <div style="text-align: left;font-size: 20px;">
         <span>card：</span>
         <el-radio-group>
-          <el-radio label="线上品牌商赞助"></el-radio>
-          <el-radio label="线下场地免费"></el-radio>
+          <el-radio label="cardName1"></el-radio>
+          <el-radio label="cardName2"></el-radio>
         </el-radio-group>
       </div>
        <el-divider></el-divider>
        <div style="text-align: left;font-size: 14px;">
+        <span>Bonus：</span>
          <el-switch
-          v-model="value1"
-          active-text="按月付费"
-          >
+          v-model="bonus"
+          active-color="#13ce66"
+          inactive-color="gray">
         </el-switch>
-        <span>（非犯得上犯得上犯得上犯得上反对）</span>
+        <span>（discription）</span>
        </div>
         <el-divider></el-divider>
-      <div> <el-button @click="toPay" class="width100 mt20" type="primary">pay</el-button></div>
+      <div> <el-button @click="toPay" class="width100 mt20" type="primary">Payment</el-button></div>
   </div>
 </template>
 
@@ -34,13 +38,9 @@
 import OrderDetail from './orderDetail'
   export default {
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
+     
     },
+    props:['nameArr'],
     components: {
      'OrderDetail':OrderDetail
     },
@@ -48,7 +48,7 @@ import OrderDetail from './orderDetail'
       toPay(){
          const loading = this.$loading({
             lock: true,
-            text: '支付中......',
+            text: 'Payments......',
             spinner: 'el-icon-loading',
             background: 'rgba(0, 0, 0, 0.7)'
           });
@@ -60,16 +60,8 @@ import OrderDetail from './orderDetail'
     },
     data() {
       return {
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+        bonus: true,
+        form: {}
       };
     }
   }

@@ -6,17 +6,19 @@
 <template>
   <div class="info-box">
     <div v-if="isList" class="card-list">
+      <div class="text-left" style="text-align: left;"><el-button type="primary" @click="create">Create Card</el-button></div>
       <el-card @click.native="toDetail()" style="margin-top:10px;cursor: pointer;" class="box-card" v-for="o in 4" :key="o">
         <div slot="header" class="clearfix">
           <span>Card name</span>
         </div>
         <div class="text item">
-          地址
+          Adress
         </div>
       </el-card>
     </div>
     <el-form v-if="!isList" ref="form" :model="form" label-width="120px">
-      <el-form-item label="address1">
+       <div class="text-left" style="text-align: left;"><el-button type="primary" @click="back">Back CardList</el-button></div>
+      <el-form-item class="mt20" label="address1">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="address2">
@@ -29,8 +31,7 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="create">Create</el-button>
-        <el-button @click="modify">modify</el-button>
+        <el-button type="primary" @click="modify">sure</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -55,7 +56,10 @@
     },
      methods: {
       create(val) {
-        
+        this.isList = false;
+      },
+      back(){
+        this.isList = true;
       },
       modify(val) {
        

@@ -7,13 +7,16 @@
   <div class="info-box">
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="firstName">
-        <el-input v-model="form.name"></el-input>
+        <el-input disabled v-model="form.firstName"></el-input>
       </el-form-item>
       <el-form-item label="lastName">
-        <el-input v-model="form.name"></el-input>
+        <el-input disabled v-model="form.lastName"></el-input>
       </el-form-item>
-       <el-form-item label="email">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item label="email">
+        <el-input disabled v-model="form.email"></el-input>
+      </el-form-item>
+      <el-form-item label="home airport">
+        <el-input v-model="form.home"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">modify</el-button>

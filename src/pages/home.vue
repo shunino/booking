@@ -121,7 +121,7 @@
           <span><i class="el-icon-check mr-10"></i> Free cancellation available</span>
         </div>
         <div class="buy" @click="toBuy()">
-          <el-button type="primary">主要按钮</el-button>
+          <el-button type="primary">purchase</el-button>
         </div>
       </div>
    </div>

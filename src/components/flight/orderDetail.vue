@@ -8,6 +8,7 @@
     cursor: pointer;
     width: 100%;
     height: 150px;
+    position: relative;
   }
   .content{
     width: 100%;
@@ -69,6 +70,7 @@
     border-left: 1px solid gray;
     justify-content: center;
   }
+
 </style>
 <style type="text/css">
   /*.el-step.is-horizontal:last-child{
@@ -79,6 +81,7 @@
   }
 </style>
 <template>
+  <div class="width100">
     <div class="f-box">
       <div class="content">
         <div class="left">
@@ -106,11 +109,13 @@
         </div>
         <div class="right">
           <div style="font-weight: bold;">TOTAL PRICE</div>
-          <div style="color: rgb(0, 170, 0);font-size: 28px;">$100</div>
-         <!--  <div style="font-size: 14px;color: gray;">one-way</div> -->
+          <div style="color: rgb(0, 170, 0);font-size: 28px;">${{price}}</div>
+          <div v-if="passage" style="font-size: 14px;color: gray;">two passage</div>
         </div>
       </div>
     </div>
+  </div>
+    
 </template>
 
 <script>
@@ -121,6 +126,7 @@
         
       }
     },
+    props:['passage','price'],
     mounted(){
      $('#mysearch').hide();
     },

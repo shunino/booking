@@ -5,8 +5,9 @@
 }
 </style>
 <template>
-  <div class="commondiv flexc">
-    <div class="paySuccess mt20">支付成功！</div>
+  <div class="commondiv flexc" style="height:600px;">
+    <div class="paySuccess mt20">Paying successfully！</div>
+    <!-- <div><el-button size= type="success">Countinue</el-button></div> -->
   </div>
 </template>
 

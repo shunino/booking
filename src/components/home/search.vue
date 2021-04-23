@@ -49,16 +49,16 @@
           <div class="sdv">
             <el-form style="width:100%;" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
               <el-form-item>
-                <el-radio-group @change="changeR"  v-model="FlightState">
-                  <el-radio  :label="1">Round-trip</el-radio>
-                  <el-radio  :label="2">One-way</el-radio>
+                  <el-radio v-model="FlightState"  :label="1">Round-trip</el-radio>
+                  <el-radio v-model="FlightState"  :label="2">One-way</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="">
                 <el-col :span="11">
-                  <el-form-item prop="date2" label="From">
+                  <el-form-item prop="fromCity" label="From">
                     <el-select
-                      v-model="value"
+                      class="width100"
+                      v-model="ruleForm.fromCity"
                       multiple
                       filterable
                       remote
@@ -80,36 +80,34 @@
                   .
                 </el-col>
                  <el-col :span="11">
-                  <el-form-item prop="date2" label="To">
-                    <el-input placeholder="To City or Airport" prefix-icon="el-icon-location-outline" v-model="ruleForm.name"></el-input>
+                  <el-form-item prop="toCity" label="From">
+                    <el-select
+                    class="width100"
+                      v-model="ruleForm.toCity"
+                      multiple
+                      filterable
+                      remote
+                      reserve-keyword
+                     placeholder="to City or Airport" 
+                     prefix-icon="el-icon-location-outline"
+                      :remote-method="getAirport"
+                      :loading="loading">
+                      <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                      </el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-form-item>
-              <!-- <el-form-item v-if="FlightState==1" label="Departing - Returning">
-                   <el-date-picker
-                   class="width100"
-                    v-model="value2"
-                    type="datetimerange"
-                    :picker-options="pickerOptions"
-                    range-separator="To"
-                    start-placeholder="Depart date and time"
-                    end-placeholder="return date and time"
-                    align="right">
-                  </el-date-picker>
-              </el-form-item>
-              <el-form-item v-if="FlightState==2" label="Departing">
-                    <el-date-picker
-                    v-model="value1"
-                    type="datetime"
-                    placeholder="Depart date and time">
-                  </el-date-picker>
-              </el-form-item> -->
-               <el-form-item label="" prop="name">
+               <el-form-item label="">
                 <el-col :span="11">
-                 <el-form-item v-if="FlightState==1" label="Departing - Returning">
+                 <el-form-item prop="returnTime" v-if="FlightState==1" label="Departing - Returning">
                    <el-date-picker
                    class="width100"
-                    v-model="value2"
+                    v-model="ruleForm.returnTime"
                     type="datetimerange"
                     :picker-options="pickerOptions"
                     range-separator="To"
@@ -118,9 +116,10 @@
                     align="right">
                   </el-date-picker>
               </el-form-item>
-              <el-form-item v-if="FlightState==2" label="Departing">
+              <el-form-item prop="fromTime" v-if="FlightState==2" label="Departing">
                     <el-date-picker
-                    v-model="value1"
+                    class="width100"
+                    v-model="ruleForm.fromTime"
                     type="datetime"
                     placeholder="Depart date and time">
                   </el-date-picker>
@@ -130,13 +129,20 @@
                   .
                 </el-col>
                  <el-col :span="11">
-                  <el-form-item prop="date2" label="Class">
-                    <el-input placeholder="The Class" prefix-icon="el-icon-crop" v-model="ruleForm.name"></el-input>
+                  <el-form-item prop="myclass" label="Class">
+                     <el-select class="width100" v-model="ruleForm.myclass" placeholder="The Class">
+                        <el-option
+                          v-for="item in classOp"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                      </el-select>
                   </el-form-item>
                 </el-col>
               </el-form-item>
               <el-form-item>
-                <div class="btn width100" @click="submitForm('ruleForm')">search</div>
+                <div class="btn width100 pointer" @click="search()">search</div>
               </el-form-item>
             </el-form>
           </div>
@@ -151,50 +157,40 @@ export default {
   name: 'Head',
   data () {
     return {
+      classOp: [{
+          value: '1',
+          label: 'enconomy'
+        }, {
+          value: '2',
+          label: 'First class'
+        }],
       loading:false,
       options:[],
       FlightState:1,
       return1:true,
-       ruleForm: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
+      ruleForm: {},
         rules: {
-          name: [
-            { required: true, message: '请输入活动名称', trigger: 'blur' },
-            { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          fromCity: [
+            { required: true, message: 'not null', trigger: 'blur' },
           ],
-          region: [
-            { required: true, message: '请选择活动区域', trigger: 'change' }
+          toCity: [
+            { required: true, message: 'not null', trigger: 'blur' },
           ],
-          date1: [
-            { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
+          fromTime: [
+            { required: true, message: 'not null', trigger: 'blur' },
           ],
-          date2: [
-            { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
+          returnTime: [
+            { required: true, message: 'not null', trigger: 'blur' },
           ],
-          type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+          myclass: [
+            { required: true, message: 'not null', trigger: 'blur' },
           ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
-          ],
-          desc: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
-          ]
         }
     }
   },
   watch: {
     '$route' (to, from) {
-      this.init();
-      this.search();
+     
     },
   },
   mounted(){
@@ -219,43 +215,8 @@ export default {
         console.log(err)
       })
     },
-    changeR(val){
-      //debugger;
-    },
-    getKey()
-    {
-       this.$router.push({path:'/datas',query:{key:this.searchinput}});
-    },
-    init(){
-      this.searchinput = "";
-    },
     search(){
-        this.newData=[];
-        this.mydata=[];
-        this.showData=[];
-        if(this.searchinput==""){
-            this.hasxia = false;
-            return;
-        } else {
-            this.hasxia = true;
-        } 
-        this.$http.post('api/resshare/datacenter/listSearch',{searchKey:this.searchinput,token:this.$token}).then(res => {
-          let myda = res.data.data;
-          if(myda.length==0||this.searchinput==""){
-            this.hasData = false;
-            return;
-          } else {
-            this.hasData = true;
-          }
-          for(let i in myda ){
-            if(myda[i].typename=="新闻动态") this.newData.push(myda[i])
-            if(myda[i].typename=="数据中心") this.mydata.push(myda[i])
-            if(myda[i].typename=="专题展示") this.showData.push(myda[i])
-          }
-          console.log(res);
-        }).catch(err => {
-          console.log(err)
-        })
+        console.log('search');
     },
     goto(type,id){
         if(type==1){

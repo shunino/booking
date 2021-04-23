@@ -56,9 +56,9 @@
         <div class="per-left">
           <div class="per-menu">
               <ul>
-                <li  class="cur" id="info" @click="changTab('info')">我的信息</li>
-                <li   id="myorder" @click="changTab('myorder')">我的订单</li>
-                <li  id="card" @click="changTab('card')">信用卡</li>
+                <li  class="cur" id="info" @click="changTab('info')">Information</li>
+                <li   id="myorder" @click="changTab('myorder')">Order</li>
+                <li  id="card" @click="changTab('card')">Card</li>
               </ul>
           </div>
         </div>

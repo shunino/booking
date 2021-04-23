@@ -81,14 +81,14 @@
                   Hi！{{user}}
                 </span>
                 <span id="personal">
-                  <router-link to="/personal" style="color:white;">个人中心</router-link>
+                  <router-link to="/personal" style="color:white;">personal</router-link>
                 </span>
                 <span style="width: 50px;" >
-                  <span class="pointer zxit" @click="lexit" >退出</span>
+                  <span class="pointer zxit" @click="lexit" >quit</span>
                 </span>
               </div>
               <div class="head-right mr10" v-show="!hasLogin">
-                   <span @click="toLogin" class="top-txt pointer">登录</span>/<span @click="toRegister" class="top-txt pointer">注册</span>
+                   <span @click="toLogin" class="top-txt pointer">login</span>/<span @click="toRegister" class="top-txt pointer">register</span>
               </div>
            </div>
          </div>
