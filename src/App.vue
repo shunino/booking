@@ -31,7 +31,6 @@
 </template>
 
 <script>
-  import Head from '@/components/home/Head'
   import Top from '@/components/home/top'
   import Search from '@/components/home/search'
   import Footer from '@/components/home/footer'
@@ -53,7 +52,6 @@
 export default {
   name: 'App',
   components: {
-    'myhead': Head,
     'top':Top,
     'myfooter': Footer,
     'search':Search

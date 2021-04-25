@@ -57,6 +57,7 @@
           <div class="per-menu">
               <ul>
                 <li  class="cur" id="info" @click="changTab('info')">Information</li>
+                <li  id="email" @click="changTab('email')">email</li>
                 <li   id="myorder" @click="changTab('myorder')">Order</li>
                 <li  id="card" @click="changTab('card')">Card</li>
               </ul>
@@ -66,6 +67,7 @@
           <Card  v-if="tabtype=='card'" class="card"></Card>
           <Info  v-if="tabtype=='info'" class="info"></Info>
           <Myorder  v-if="tabtype=='myorder'" class="myorder"></Myorder>
+          <Email  v-if="tabtype=='email'" class="email"></Email>
       </div>
     </div>
   </div>
@@ -75,6 +77,7 @@
 import Info from '../components/flight/info'
 import Card from '../components/flight/card'
 import Myorder from '../components/flight/myorder'
+import Email from '../components/flight/email'
 export default {
   name: 'Home',
   data () {
@@ -101,7 +104,8 @@ export default {
   components: {
     'Card': Card,
     'Info':Info,
-    'Myorder':Myorder
+    'Myorder':Myorder,
+    'Email':Email
   }
 }
 </script>

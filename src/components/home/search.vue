@@ -59,19 +59,19 @@
                     <el-select
                       class="width100"
                       v-model="ruleForm.fromCity"
-                      multiple
+                      
                       filterable
                       remote
                       reserve-keyword
                      placeholder="From City or Airport" 
                      prefix-icon="el-icon-location-outline"
-                      :remote-method="getAirport"
+                      :remote-method="getAirport1"
                       :loading="loading">
-                      <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                     <el-option
+                        v-for="item in fromOption"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -84,19 +84,19 @@
                     <el-select
                     class="width100"
                       v-model="ruleForm.toCity"
-                      multiple
+                      
                       filterable
                       remote
                       reserve-keyword
                      placeholder="to City or Airport" 
                      prefix-icon="el-icon-location-outline"
-                      :remote-method="getAirport"
+                      :remote-method="getAirport2"
                       :loading="loading">
                       <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        v-for="item in toOption"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -168,6 +168,8 @@ export default {
       options:[],
       FlightState:1,
       return1:true,
+      fromOption:[],
+      toOption:[],
       ruleForm: {},
         rules: {
           fromCity: [
@@ -196,19 +198,20 @@ export default {
   mounted(){
   },
   methods:{
-    getAirport(val){
+    getAirport1(val){
       let self = this;
-      debugger;
-      self.$http.get(this.$host+'/api/airport/search',{city:val}).then(res => {
-        debugger;
-        self.$setCookie('username',res.data.data.username,'55');
-        self.$setCookie('userid',res.data.data.userid,'55');
-        self.$setCookie('token',res.data.data.token,'55');
-        // self.hasLogin = true;
-        // self.dialogVisible1 = false;
-        // self.dialogVisible = false;
-        // self.user = this.$getCookie('username');
-        self.$router.push({path:'/'});
+      self.$http.get(this.$host+'/api/airport/search?city='+val).then(res => {
+        this.fromOption = res.data;
+        console.log(res);
+      }).catch(err => {
+        self.$message.error('email or password is error!');
+        console.log(err)
+      })
+    },
+    getAirport2(val){
+      let self = this;
+      self.$http.get(this.$host+'/api/airport/search?city='+val).then(res => {
+        this.toOption = res.data;
         console.log(res);
       }).catch(err => {
         self.$message.error('email or password is error!');

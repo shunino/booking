@@ -76,7 +76,7 @@
             </div>
           </div>
            <div class="top-search" style="width:20%;text-align:right;">
-             <div class="head-left" v-show="!hasLogin">
+             <div class="head-left" v-show="hasLogin">
                 <span style="justify-content: flex-end;margin-right: 5px;">
                   Hi！{{user}}
                 </span>
@@ -156,20 +156,22 @@ export default {
   },
   watch: {
     '$route' (to, from) {
-        let user = this.$getCookie('username');
-        if(user){
-          this.hasLogin = true;
-          this.dialogVisible = false;
-          this.user = this.$getCookie('username');
-        }
+          let firstName= this.$getCookie('firstName');
+           let lastName= this.$getCookie('lastName');
+          if(firstName){
+            this.hasLogin = true;
+            this.dialogVisible = false;
+            this.user = firstName+' '+lastName;
+          }
       },
   },
   mounted(){
-    let user = this.$getCookie('username');
-    if(user){
+    let firstName= this.$getCookie('firstName');
+     let lastName= this.$getCookie('lastName');
+    if(firstName){
       this.hasLogin = true;
       this.dialogVisible = false;
-      this.user = this.$getCookie('username');
+      this.user = firstName+' '+lastName;
     }
     $('.head-left').find('span').removeClass('cur');
     $('#personal').addClass('cur');
@@ -187,8 +189,9 @@ export default {
       //this.dialogVisible1 = true;
     },
     lexit(){
-      this.$setCookie('username','','-1');
-      this.$setCookie('userid','','-1');
+      this.$setCookie('firstName','','-1');
+      this.$setCookie('lastName','','-1');
+      this.$setCookie('email','','-1');
       this.$setCookie('token','','-1');
       this.hasLogin = false;
       this.$router.push({path:'/'})

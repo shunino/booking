@@ -147,15 +147,16 @@ export default {
         formData.append('password', self.ruleForm1.verificationCode);
         if (valid) {
           self.$http.post(this.$host+'/api/auth',formData).then(res => {
-            debugger;
-           self.$http.post(this.$host+'/api/auth',{header:{}}).then(res1 => {
-                self.$setCookie('username',res.data.data.username,'55');
-                self.$setCookie('userid',res.data.data.userid,'55');
-                self.$setCookie('token',res.data.data.token,'55');
+           self.$http.get(this.$host+'/api/profile',{headers:{Authorization:'Bearer'+res.data.access_token}}).then(res1 => {
+
+                self.$setCookie('firstName',res1.data.firstName,'55');
+                self.$setCookie('lastName',res1.data.lastName,'55');
+                self.$setCookie('email',res1.data.email,'55');
+                self.$setCookie('token',res.data.access_token,'55');
                 self.$router.push({path:'/'});
                 console.log(res);
               }).catch(err => {
-                self.$message.error('email or password is error!');
+                // self.$message.error('email or password is error!');
                 console.log(err)
               })
           }).catch(err => {

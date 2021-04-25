@@ -28,27 +28,22 @@
 <script>
   export default {
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      }
+      
     },
     data() {
       return {
         form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
+          firstName:'',
+          lastName:'',
+          email:'',
         }
       };
-    }
+    },
+    mounted(){
+     this.form.firstName= this.$getCookie('firstName');
+     this.form.lastName= this.$getCookie('lastName');
+     this.form.email= this.$getCookie('email');
+    },
   }
 </script>
 

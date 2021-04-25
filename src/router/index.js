@@ -12,7 +12,7 @@ import Flight from '@/pages/flight'
 import Success from '@/pages/success'
 
 Vue.use(Router)
-const HoTitle = '-贵州水土保持-数据共享中心';
+const HoTitle = '';
 const router = new Router({
   routes: [
     {
