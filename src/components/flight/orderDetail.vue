@@ -87,17 +87,17 @@
         <div class="left">
           <div class="head">
             <span>Nonstop</span>
-            <span style="color: gray;">1h 58m</span>
+            <span style="color: gray;">{{cardDetail.timeLong}} {{cardDetail.miles}}m</span>
           </div>
           <div class="main">
             <div class="m-left">
              <div><img src="../../assets/llogo.png"></div>
-             <div>SIC</div>
+             <div>{{cardDetail.airlineName}}</div>
             </div>
             <div class="m-right">
               <el-steps :active="1" >
-                <el-step title="11:43a" description="DTA" icon="el-icon-s-promotion"></el-step>
-                <el-step title="14:45p" description="ATL" icon="el-icon-s-promotion">></el-step>
+                <el-step :title="cardDetail.departureTime" :description="cardDetail.departureAirportName" icon="el-icon-s-promotion"></el-step>
+                <el-step :title="cardDetail.arrivalTime" :description="cardDetail.destinationAirportName" icon="el-icon-s-promotion">></el-step>
               </el-steps>
               <!--  <el-steps :active="1" >
                 <el-step title="11:43a" description="DTA" icon="el-icon-s-promotion"></el-step>
@@ -110,7 +110,7 @@
         <div class="right">
           <div style="font-weight: bold;">TOTAL PRICE</div>
           <div style="color: rgb(0, 170, 0);font-size: 28px;">${{price}}</div>
-          <div v-if="passage" style="font-size: 14px;color: gray;">two passage</div>
+          <div v-if="passage" style="font-size: 14px;color: gray;">passage：{{passage}}</div>
         </div>
       </div>
     </div>
@@ -126,7 +126,7 @@
         
       }
     },
-    props:['passage','price'],
+    props:['passage','price','cardDetail'],
     mounted(){
      $('#mysearch').hide();
     },

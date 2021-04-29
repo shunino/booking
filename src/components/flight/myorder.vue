@@ -57,25 +57,25 @@
       title="Order"
       :visible.sync="dialogVisible"
       width="60%"
-      :before-close="handleClose">
-      <div class="pay-box">
-        <Pay :nameArr="nameArr"></Pay>
+      >
+      <div class="pay-box" v-if="curOrder">
+        <Pay :cardDetail="curOrder.items[0]" :price="curOrder.items[0].price" :bookId="curOrder.id" :nameArr="curOrder.items[0].passengerNames"></Pay>
       </div>
     </el-dialog>
-    <el-card  style="margin-top:10px;cursor: pointer;" class="box-card" v-for="i in orderList" :key="o">
+    <el-card  style="margin-top:10px;cursor: pointer;" class="box-card" v-for="i in orderList">
         <div slot="header" class="clearfix">
-          <span>order Number</span>
+          <span>order Number：{{i.id}}</span>
         </div>
         <div class="text item f-box">
-          <div v-if="i.status==2" class="payed">payment success</div>
-          <div v-if="i.status==3" class="canceled">canceled</div>
-          <div v-if="i.status==1" class="cancel" @click="cancel()">
+          <div v-if="i.status=='paid'" class="payed">payment success</div>
+          <div v-if="i.status=='canceled'" class="canceled">canceled</div>
+          <div v-if="i.status=='unpaid'" class="cancel" @click="cancel(i.id)">
             <el-button type="warning">cancel</el-button>
           </div>
-          <div v-if="i.status==1" class="buy" @click="payment()">
+          <div v-if="i.status=='unpaid'" class="buy" @click="payment(i)">
             <el-button type="primary">payment</el-button>
           </div>
-          <OrderDetail price="100" :passage="passage"></OrderDetail>
+          <OrderDetail v-if="i.items" :cardDetail="i.items[0]" :price="i.items[0].price" :passage="i.items[0].passengerNames"></OrderDetail>
         </div>
       </el-card>
   </div>
@@ -85,59 +85,68 @@
 import OrderDetail from './orderDetail'
 import Pay from './pay'
   export default {
-    methods: {
-      handleClose(){
-        this.dialogVisible = false;
-      },
-      payment(){
-        let self = this;
-        this.dialogVisible = true;
-      },
-      cancel(){
-        this.$alert('CANCEL are you sure?', 'cancel', {
-          confirmButtonText: 'yes',
-          callback: action => {
-            this.$message({
-              type: 'success',
-              message: `CANCEL success`
-            });
-          }
-        });
-      }
-    },
+    
     components: {
      'OrderDetail':OrderDetail,
-     'Pay':Pay
+     'Pay':Pay,
     },
     data() {
       return {
-        orderList:[
-          {
-            status:1
-          },
-          {
-            status:2
-          },
-          {
-            status:3
-          }
-        ],
         dialogVisible:false,
-        user:[],
-        nameArr:[],
-        passage:true,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        }
+        orderList:[],
+        payId:'',
+        curOrder:null
       };
-    }
+    },
+    mounted() {
+     this.getList();
+    },
+    methods: {
+      getList(){
+        let self = this;
+        let auth = 'Bearer'+this.$getCookie('token');
+        this.$http.get(this.$host+'/api/booking/list',{headers:{Authorization:auth}}).then(res => {
+                self.orderList = res.data;
+                self.orderList.map(function(i){
+                  if(i.items){
+                     i.items[0].price = i.items[0].price.toFixed(1);
+                  } 
+                });
+                console.log(res);
+              }).catch(err => {
+                // self.$message.error('email or password is error!');
+                console.log(err)
+              })
+      },
+      handleClose(){
+        this.dialogVisible = false;
+      },
+      payment(curOrder){
+        let self = this;
+        this.curOrder = curOrder;
+        this.dialogVisible = true;
+      },
+      cancel(id){
+        this.$alert('CANCEL are you sure?', 'cancel', {
+          confirmButtonText: 'yes',
+          callback: action => {
+            console.log(action);
+            if(action!='cancel')
+            this.toCancel(id);
+          }
+        });
+      },
+      toCancel(id){
+         let auth = 'Bearer'+this.$getCookie('token');
+          let self = this;
+          self.$http.post(this.$host+'/api/booking/cancel/'+id,null,{headers:{Authorization:auth}}).then(res => {
+               self.$message.success('cancel success');
+               this.getList();
+            }).catch(err => {
+              console.log(err)
+            })
+      }
+    },
   }
 </script>
 

@@ -18,6 +18,7 @@
     background-color: rgba(255, 255, 255, 0.8);
     border-top: 3px solid #f99e3e;
     padding: 28px 61px 59px;
+    text-align: left;
   }
   .btn{
         color: #fff;
@@ -45,12 +46,12 @@
   }
 </style>
 <template>
-       <div class="mytop" id="mysearch">
+       <div class="mytop">
           <div class="sdv">
             <el-form style="width:100%;" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
               <el-form-item>
-                  <el-radio v-model="FlightState"  :label="1">Round-trip</el-radio>
                   <el-radio v-model="FlightState"  :label="2">One-way</el-radio>
+                  <el-radio v-model="FlightState"  :label="1">Round-trip</el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item label="">
@@ -80,7 +81,7 @@
                   .
                 </el-col>
                  <el-col :span="11">
-                  <el-form-item prop="toCity" label="From">
+                  <el-form-item prop="toCity" label="To">
                     <el-select
                     class="width100"
                       v-model="ruleForm.toCity"
@@ -108,8 +109,9 @@
                    <el-date-picker
                    class="width100"
                     v-model="ruleForm.returnTime"
-                    type="datetimerange"
-                    :picker-options="pickerOptions"
+                    type="daterange"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
                     range-separator="To"
                     start-placeholder="Depart date and time"
                     end-placeholder="return date and time"
@@ -118,9 +120,11 @@
               </el-form-item>
               <el-form-item prop="fromTime" v-if="FlightState==2" label="Departing">
                     <el-date-picker
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
                     class="width100"
                     v-model="ruleForm.fromTime"
-                    type="datetime"
+                    type="date"
                     placeholder="Depart date and time">
                   </el-date-picker>
               </el-form-item>
@@ -142,7 +146,7 @@
                 </el-col>
               </el-form-item>
               <el-form-item>
-                <div class="btn width100 pointer" @click="search()">search</div>
+                <div class="btn width100 pointer" @click="mysearch()">search</div>
               </el-form-item>
             </el-form>
           </div>
@@ -158,15 +162,15 @@ export default {
   data () {
     return {
       classOp: [{
-          value: '1',
+          value: '2',
           label: 'enconomy'
         }, {
-          value: '2',
+          value: '1',
           label: 'First class'
         }],
       loading:false,
       options:[],
-      FlightState:1,
+      FlightState:2,
       return1:true,
       fromOption:[],
       toOption:[],
@@ -218,8 +222,48 @@ export default {
         console.log(err)
       })
     },
-    search(){
-        console.log('search');
+    mysearch(){
+      let time1,time2;
+      if(!this.$getCookie('token')){
+        this.$router.push({path:'/login'})
+        return;
+      }
+      if(this.ruleForm.fromCity==this.ruleForm.toCity){
+        this.$message.error('fromCity can not same as toCity!');
+        return;
+      }
+      if(this.ruleForm.returnTime){
+        time1 = this.ruleForm.returnTime[0];
+        time2 = this.ruleForm.returnTime[1];
+      } else {
+        time1 = this.ruleForm.fromTime;
+        time2 = null;
+      }
+        let ob = {
+          dateDepart:time1,
+          dateReturn:time2,
+          airportIdFrom:this.ruleForm.fromCity,
+          airportIdTo:this.ruleForm.toCity,
+          seats:1,
+          seatClass:this.ruleForm.myclass,
+        };
+        let auth = 'Bearer'+this.$getCookie('token');
+        let self = this;
+        this.$refs['ruleForm'].validate((valid) => {
+        if (valid) {
+          self.$http.get(this.$host+'/api/flight/search',{headers:{Authorization:auth},params:ob}).then(res => {
+              let arr = [];
+              arr.push(res.data.flightsDepart[0]);
+              if(res.data.flightsReturn){
+                arr.push(res.data.flightsReturn[0]);
+              }
+              self.$emit('mySearch',arr);
+              console.log(res);
+            }).catch(err => {
+              console.log(err)
+            })
+          }
+        });
     },
     goto(type,id){
         if(type==1){

@@ -1,3 +1,31 @@
+<style>
+::-webkit-scrollbar {
+        width: 10px;     
+
+        height: 10px;
+
+    }
+
+::-webkit-scrollbar-thumb {
+
+        border-radius: 10px;
+
+         -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+
+        background: #A5A5A5;
+
+    }
+
+::-webkit-scrollbar-track {
+
+        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+
+        border-radius: 10px;
+
+        background: white;
+
+}
+</style>
 <style scoped>
   .f-box{
     box-shadow: rgb(0 0 0 / 8%) 0px 0px 2px 0px, rgb(0 0 0 / 16%) 0px 1px 4px 0px;
@@ -84,24 +112,25 @@
   }
 </style>
 <template>
-  <div class="commondiv">
-   <div class="width:80%">
-     <div class="f-box" v-for="i in 5">
+  <div class="commondiv" style="width:100%;">
+  <search id="mysearch" @mySearch="getList" ></search>
+   <div class="width:80%" style="padding-bottom:20px;">
+     <div class="f-box" v-for="i in myList">
         <div class="content">
           <div class="left">
             <div class="head">
               <span>Nonstop</span>
-              <span style="color: gray;">1h 58m</span>
+              <span style="color: gray;">{{i.timeLong}} {{i.miles}}m</span>
             </div>
             <div class="main">
               <div class="m-left">
                <div><img src="../assets/llogo.png"></div>
-               <div>SIC</div>
+               <div>{{i.airlineName}}</div>
               </div>
               <div class="m-right">
                 <el-steps :active="1" >
-                  <el-step title="11:43a" description="DTA" icon="el-icon-s-promotion"></el-step>
-                  <el-step title="14:45p" description="ATL" icon="el-icon-s-promotion">></el-step>
+                  <el-step :title="i.departureTime" :description="i.departureAirportName" icon="el-icon-s-promotion"></el-step>
+                  <el-step :title="i.arrivalTime" :description="i.destinationAirportName" icon="el-icon-s-promotion">></el-step>
                 </el-steps>
                 <!--  <el-steps :active="1" >
                   <el-step title="11:43a" description="DTA" icon="el-icon-s-promotion"></el-step>
@@ -112,68 +141,64 @@
             </div>
           </div>
           <div class="right">
-            <div style="font-weight: bold;">BASIC ECONOMY</div>
-            <div style="color: rgb(0, 170, 0);font-size: 28px;">$100</div>
+            <div style="font-weight: bold;">{{i.seatClass}}</div>
+            <div style="color: rgb(0, 170, 0);font-size: 28px;">${{i.price}}</div>
             <div style="font-size: 14px;color: gray;">one-way</div>
           </div>
         </div>
         <div class="foot">
           <span><i class="el-icon-check mr-10"></i> Free cancellation available</span>
         </div>
-        <div class="buy" @click="toBuy()">
+        <div class="buy" @click="toBuy(i)">
           <el-button type="primary">purchase</el-button>
         </div>
       </div>
    </div>
   </div>
 </template>
-<style>
-::-webkit-scrollbar {
-        width: 10px;     
-
-        height: 10px;
-
-    }
-
-::-webkit-scrollbar-thumb {
-
-        border-radius: 10px;
-
-         -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-
-        background: #A5A5A5;
-
-    }
-
-::-webkit-scrollbar-track {
-
-        -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-
-        border-radius: 10px;
-
-        background: white;
-
-}
-</style>
 <script>
+import Search from '@/components/home/search'
 export default {
   name: 'Home',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-  
+      myList: [],
+      arr1:[],
+      arr2:[]
     }
   },
   mounted(){
    $('#mysearch').show();
+   this.getList();
+   this.getList1();
   },
   methods:{
-    toBuy(){
-      this.$router.push({path:'/flight'});
+    toBuy(flight){
+      this.$router.push({path:'/flight',query:{
+        flight: flight
+      }});
+    },
+    getList(arr){
+      this.myList = arr;
+      this.myList.map(function(i){
+        i.price = i.price.toFixed(1);
+        i.timeLong='';
+        if(i.duration<60) i.timeLong =i.duration+'min';
+        else {
+          let q = i.duration%60;
+          let w = i.duration/60;
+          if(q==0){
+            i.timeLong = w+'h';
+          } else {
+            i.timeLong = w+'h'+q+'min';
+          }
+          
+        }
+      });
     }
   },
   components: {
-    
+    'search':Search
   }
 }
 </script>

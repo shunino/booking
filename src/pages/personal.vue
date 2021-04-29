@@ -57,8 +57,8 @@
           <div class="per-menu">
               <ul>
                 <li  class="cur" id="info" @click="changTab('info')">Information</li>
-                <li  id="email" @click="changTab('email')">email</li>
                 <li   id="myorder" @click="changTab('myorder')">Order</li>
+                <li  id="email" @click="changTab('email')">email</li>
                 <li  id="card" @click="changTab('card')">Card</li>
               </ul>
           </div>

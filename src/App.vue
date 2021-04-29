@@ -12,13 +12,13 @@
        <!--  </div>
       </div> -->
       <!-- <myhead id="myhead"></myhead> -->
-      <search id="mysearch"></search>
+      <!-- <search id="mysearch" ></search> -->
       <div id="mydiv" style="width: 100%;display: flex;justify-content: center;background: white;padding-bottom: 20px;">
-        <div style="width: 1400px;display: flex;justify-content: center;flex-direction: column;height:100%;">
-          
+       <!--  <div style="width: 1400px;display: flex;justify-content: center;flex-direction: column;height:100%;">
+           -->
             <router-view/>
           
-        </div>
+       <!--  </div> -->
       </div>
       <!-- <myfooter></myfooter> -->
     </div>

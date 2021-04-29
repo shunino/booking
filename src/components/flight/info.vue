@@ -15,12 +15,12 @@
       <el-form-item label="email">
         <el-input disabled v-model="form.email"></el-input>
       </el-form-item>
-      <el-form-item label="home airport">
+     <!--  <el-form-item label="home airport">
         <el-input v-model="form.home"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">modify</el-button>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
   </div>
 </template>

@@ -1,4 +1,6 @@
-# menghu
+# booking
+- -
+you can modify server host by 'config/server.js'
 
 > A Vue.js project
 

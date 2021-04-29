@@ -59,7 +59,8 @@
        <div class="mytop">
         <div class="mytopD">
           <div class="top-icon" style="width:20%;">
-            <img class="pointer" @click="goto()" src="../../assets/booking/logo.png">
+           <!--  <img class="pointer" @click="goto()" src="../../assets/booking/logo.png"> -->
+           CS425 project Group#3
           </div>
           <div class="tab" style="width:60%;">
             <!-- <div class="tabclick">
